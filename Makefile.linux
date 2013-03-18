@@ -1,0 +1,10 @@
+all: bitstring.so
+
+bitstring/configure:
+	cd bitstring && libtoolize && aclocal && automake --gnu --add-missing && autoconf
+
+build/src/bitstring/config.h: bitstring/configure
+	mkdir build && cd build && ../bitstring/configure
+
+bitstring.so: build/src/bitstring/config.h bitstring/src/bitstring/lbindump.c bitstring/src/bitstring/lbitstring.c bitstring/src/bitstring/lhexdump.c
+	gcc -fPIC -shared -I/usr/include/lua5.1 -Ibuild/src/bitstring -Ibitstring/src bitstring/src/bitstring/lbitstring.c -o bitstring.so
