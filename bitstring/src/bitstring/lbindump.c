@@ -115,7 +115,7 @@ static int l_bindump(lua_State *l)
     size_t i = 0;
     while(i < len)
     {
-        unsigned char *result = (unsigned char *)luaL_prepbuffer(&b);
+        unsigned char *result = (unsigned char *)luaL_prepbuffsize(&b, LUAL_BUFFERSIZE);
         memset(result, 'X', LUAL_BUFFERSIZE);
         size_t column = 0;
         while(i < len && column < LUAL_BUFFERSIZE - BIN_PRINTED_LINE_LENGTH)
@@ -164,7 +164,7 @@ static int l_binstream(lua_State *l)
     size_t i = 0;
     while(i < len)
     {
-        unsigned char *result = (unsigned char *)luaL_prepbuffer(&b);
+        unsigned char *result = (unsigned char *)luaL_prepbuffsize(&b, LUAL_BUFFERSIZE);
         size_t column = 0;
         while(i < len && column < LUAL_BUFFERSIZE - 8)
         {
@@ -194,7 +194,7 @@ static int l_frombinstream(lua_State *l)
     size_t i = 0;
     while(i < len)
     {
-        unsigned char *result = (unsigned char *)luaL_prepbuffer(&b);
+        unsigned char *result = (unsigned char *)luaL_prepbuffsize(&b, LUAL_BUFFERSIZE);
         unsigned char *current_byte = result;
         unsigned char *result_end = result + LUAL_BUFFERSIZE;
         while(i < len && current_byte < result_end)

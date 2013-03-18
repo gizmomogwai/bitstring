@@ -386,7 +386,7 @@ static void basic_pack_int(lua_State *l, ELEMENT_DESCRIPTION *elem, lua_Integer 
         unsigned char tmp = *current_byte;
         luaL_addsize(state->buffer, size);
 
-        state->prep_buffer = (unsigned char *)luaL_prepbuffer(state->buffer);
+        state->prep_buffer = (unsigned char *)luaL_prepbuffsize(state->buffer, LUAL_BUFFERSIZE);
         state->current_bit = bit_offset;
         current_byte = state->prep_buffer;
         *current_byte = tmp;
@@ -569,7 +569,7 @@ static void pack_aligned_bin(lua_State *l, ELEMENT_DESCRIPTION *elem, const unsi
             size_t size = current_byte - state->prep_buffer;
             luaL_addsize(state->buffer, size);
 
-            state->prep_buffer = (unsigned char *)luaL_prepbuffer(state->buffer);
+            state->prep_buffer = (unsigned char *)luaL_prepbuffsize(state->buffer, LUAL_BUFFERSIZE);
             current_byte = state->prep_buffer;
             size_t space = reminder <= LUAL_BUFFERSIZE ? reminder : LUAL_BUFFERSIZE;
             memcpy(current_byte, bin, space);
@@ -1035,7 +1035,7 @@ static void unpack_bin(lua_State *l, ELEMENT_DESCRIPTION *elem, int arg_index, U
     size_t i = 0;
     while(i < elem->size)
     {
-        unsigned char *result = (unsigned char *)luaL_prepbuffer(&b);
+        unsigned char *result = (unsigned char *)luaL_prepbuffsize(&b, LUAL_BUFFERSIZE);
         size_t j = 0;
         while(i < elem->size && j < LUAL_BUFFERSIZE)
         {
@@ -1593,7 +1593,7 @@ static int l_pack(lua_State *l)
 
     PACK_STATE state;
     state.buffer = &b;
-    state.prep_buffer = (unsigned char *)luaL_prepbuffer(&b);
+    state.prep_buffer = (unsigned char *)luaL_prepbuffsize(&b, LUAL_BUFFERSIZE);
     state.current_bit = 0;
     state.result_bits = LUAL_BUFFERSIZE * CHAR_BIT;
 
